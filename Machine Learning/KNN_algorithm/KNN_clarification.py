@@ -1,4 +1,0 @@
-"""
-KNN_clarification.py
-"""
-
