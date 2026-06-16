@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+*.egg-info/
+
+# IDE/editor
+.idea/
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS/temp files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# Local data/model artifacts
+data/
+datasets/
+models/
+*.pkl
+*.joblib
