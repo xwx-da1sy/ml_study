@@ -10,7 +10,7 @@ KNN处理回归问题
     模型预测
 """
 
-# 导包
+# 导包好的模型对象
 from sklearn.neighbors import KNeighborsRegressor
 
 # 新建数据集

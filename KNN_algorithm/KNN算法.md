@@ -177,8 +177,8 @@ d(x, y) = ||x - y||2
 
 因此使用 KNN 前，通常需要做特征预处理，例如：
 
-- 标准化：当前值 - 最小值 / (最大值 - 最小值)
-- 归一化
+- 归一化：`(当前值 - 最小值) / (最大值 - 最小值)`
+- 标准化：`(当前值 - 均值) / 标准差`
 
 这样不同特征才更容易在距离计算中公平地参与比较。
 
@@ -575,7 +575,177 @@ x_test = transfer.transform(x_test)
 KNN 依赖距离，所以通常需要先做特征缩放。
 ```
 
-### 6. 归一化示例中的训练集矩阵
+### 6. 归一化和标准化的算法公式
+
+KNN 中常说的“归一化”，很多时候泛指“特征缩放”。严格一点说，常见做法可以分成下面几类。
+
+#### 1. Min-Max 归一化
+
+Min-Max 归一化会把数据缩放到固定范围，最常见的是 `[0, 1]`。
+
+公式是：
+
+```text
+x_scaled = (x - x_min) / (x_max - x_min)
+```
+
+如果希望缩放到 `[a, b]`，公式是：
+
+```text
+x_scaled = a + (x - x_min) * (b - a) / (x_max - x_min)
+```
+
+对应 `scikit-learn`：
+
+```python
+from sklearn.preprocessing import MinMaxScaler
+
+transfer = MinMaxScaler(feature_range=(0, 1))
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.transform(x_test)
+```
+
+它的特点是结果范围固定，容易理解；缺点是容易受极端值影响。比如收入特征里突然出现一个特别大的值，最大值会被拉高，其他样本会被压得很小。
+
+#### 2. Z-score 标准化
+
+标准化会把数据转换成均值为 `0`、标准差为 `1` 的形式。
+
+公式是：
+
+```text
+x_scaled = (x - mean) / std
+```
+
+其中：
+
+```text
+mean = 这一列特征的平均值
+std  = 这一列特征的标准差
+```
+
+对应 `scikit-learn`：
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+transfer = StandardScaler()
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.transform(x_test)
+```
+
+在 KNN 里，标准化通常比 Min-Max 归一化更常用。因为 KNN 关心距离，标准化可以让不同特征围绕自己的平均水平来比较，不会让数值范围大的特征天然占优势。
+
+#### 3. MaxAbs 缩放
+
+MaxAbs 缩放会用每一列特征的最大绝对值来缩放数据。
+
+公式是：
+
+```text
+x_scaled = x / max(|x|)
+```
+
+对应 `scikit-learn`：
+
+```python
+from sklearn.preprocessing import MaxAbsScaler
+
+transfer = MaxAbsScaler()
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.transform(x_test)
+```
+
+它会把数据缩放到 `[-1, 1]` 附近，并且不会破坏原来数据中的 `0`。如果数据本身比较稀疏，比如很多位置都是 `0`，这种方式比较合适。
+
+#### 4. Robust 缩放
+
+Robust 缩放使用中位数和四分位距，目的是减少异常值的影响。
+
+公式可以理解为：
+
+```text
+x_scaled = (x - median) / IQR
+```
+
+其中：
+
+```text
+median = 中位数
+IQR    = 第三四分位数 - 第一四分位数
+```
+
+对应 `scikit-learn`：
+
+```python
+from sklearn.preprocessing import RobustScaler
+
+transfer = RobustScaler()
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.transform(x_test)
+```
+
+如果某一列特征里有明显异常值，例如收入里混入了极少数特别大的值，`RobustScaler` 往往比 `MinMaxScaler` 更稳。
+
+#### 5. 向量归一化
+
+前面几种方法通常是“按列处理”，也就是每一列特征各自缩放。向量归一化则通常是“按行处理”，它会把每个样本向量缩放成长度为 `1` 的向量。
+
+公式是：
+
+```text
+x_scaled = x / ||x||
+```
+
+如果使用 L2 范数，就是：
+
+```text
+x_scaled = x / sqrt(x1^2 + x2^2 + ... + xn^2)
+```
+
+对应 `scikit-learn`：
+
+```python
+from sklearn.preprocessing import Normalizer
+
+transfer = Normalizer(norm="l2")
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.transform(x_test)
+```
+
+这种方式更强调样本方向，而不是样本大小。它常见于文本向量、词频向量等场景。普通表格数据做 KNN 时，一般优先考虑 `StandardScaler` 或 `MinMaxScaler`。
+
+#### 6. 训练集和测试集的正确处理方式
+
+无论使用哪一种缩放算法，都要记住同一个原则：
+
+```text
+训练集：fit_transform
+测试集：transform
+```
+
+也就是：
+
+```python
+transfer = StandardScaler()
+
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.transform(x_test)
+```
+
+不能对测试集重新 `fit_transform`，因为测试集是用来模拟未知数据的。如果测试集也参与计算最小值、最大值、均值或标准差，就相当于提前看到了考试题的信息，会造成数据泄漏。
+
+对于 KNN，可以先这样记：
+
+```text
+一般表格数据：优先 StandardScaler
+数值范围明确且异常值少：可以 MinMaxScaler
+异常值明显：可以 RobustScaler
+稀疏数据：可以 MaxAbsScaler
+文本向量或方向更重要的向量：可以 Normalizer
+```
+
+### 7. 归一化示例中的训练集矩阵
 
 上面代码里的训练集是：
 
@@ -658,7 +828,7 @@ X_train.shape = [4, 2]
 4 个样本，每个样本 2 个特征
 ```
 
-### 7. 小结
+### 8. 小结
 
 这段代码的核心作用是：
 
