@@ -361,3 +361,195 @@ print(y_test.shape)
 x_train 和 x_test 仍然是二维特征矩阵
 y_train 和 y_test 仍然是一维标签向量
 ```
+
+## 14. 划分训练集和测试集
+
+```text
+训练集 -> 用来让模型学习
+测试集 -> 用来检查模型面对陌生数据的表现
+```
+
+鸢尾花共有 150 个样本，`test_size=0.2` 表示训练集有 120 个样本，测试集有 30 个样本。
+
+```text
+x_train 与 y_train 配对
+x_test  与 y_test 配对
+```
+
+`random_state=22` 用于固定随机划分结果。数字本身没有特殊含义，只要数字相同，每次划分结果就相同。
+
+## 15. 标准化训练集和测试集
+
+KNN 根据距离寻找邻居，因此需要避免某个数值范围较大的特征过度影响距离。
+
+标准化器的正确使用顺序：
+
+```text
+1. 从 x_train 计算每一列的均值和标准差
+2. 使用这些参数转换 x_train
+3. 继续使用同一组参数转换 x_test
+```
+
+对应关系：
+
+```text
+x_train -> fit_transform：学习参数并转换
+x_test  -> transform：只转换，不重新学习参数
+```
+
+关键原则：
+
+> 标准化参数只能从训练集学习。测试集必须使用训练集生成的标准化模板，否则会发生数据泄漏。
+
+标准化只处理特征 `x`，不处理分类标签 `y`。标准化前后数组形状不变：
+
+```text
+x_train: (120, 4) -> (120, 4)
+x_test:   (30, 4) ->  (30, 4)
+```
+
+标准化会分别处理 4 个特征列，而不是把所有数值混在一起计算。
+
+## 16. 创建 KNN 分类器
+
+完成数据划分和标准化之后，可以创建一个 KNN 分类器：
+
+```python
+knn = KNeighborsClassifier(n_neighbors=5)
+```
+
+含义：
+
+```text
+KNeighborsClassifier -> KNN 分类模型
+knn                  -> 保存这个模型对象的变量名
+n_neighbors=5        -> 预测时寻找距离最近的 5 个训练样本
+```
+
+如果 5 个邻居的类别分别是：
+
+```text
+setosa, setosa, versicolor, setosa, versicolor
+```
+
+投票结果为：
+
+```text
+setosa:     3 票
+versicolor: 2 票
+
+最终预测 -> setosa
+```
+
+此时只是创建了分类器，还没有把训练数据交给它，因此模型还没有完成训练。
+
+`n_neighbors` 就是 KNN 中的 `K`。K 太小容易受个别样本影响，K 太大则可能忽略局部特征；案例先使用 `5`，后面再讨论如何选择更合适的 K。
+
+## 17. 使用训练集训练模型
+
+先把标准化结果分别保存下来：
+
+```python
+scaler = StandardScaler()
+x_train_scaled = scaler.fit_transform(x_train)
+x_test_scaled = scaler.transform(x_test)
+```
+
+然后把训练集交给 KNN 分类器：
+
+```python
+knn.fit(x_train_scaled, y_train)
+```
+
+传入的两部分数据是：
+
+```text
+x_train_scaled -> 标准化后的训练特征，也就是题目
+y_train        -> 训练样本对应的类别，也就是答案
+```
+
+训练时不使用 `x_test_scaled` 和 `y_test`。它们要留到模型训练完成后，用于独立测试模型。
+
+KNN 属于惰性学习算法。调用 `fit` 时，它主要保存训练特征和标签；真正大量计算样本距离的工作发生在预测阶段。
+
+这一阶段的数据流：
+
+```mermaid
+flowchart LR
+    A["x_train_scaled<br/>训练题目"] --> C["knn.fit"]
+    B["y_train<br/>训练答案"] --> C
+    C --> D["已经接收训练数据的 KNN 模型"]
+    E["x_test_scaled 和 y_test"] -. "暂时不参与" .-> C
+```
+
+## 18. 使用测试集进行预测
+
+模型训练完成后，把标准化后的测试特征交给模型：
+
+```python
+y_pred = knn.predict(x_test_scaled)
+```
+
+含义：
+
+```text
+x_test_scaled -> 30 朵测试花的 4 个标准化特征
+knn.predict    -> 为每朵花寻找最近的 5 个训练样本并投票
+y_pred         -> 模型预测出的 30 个类别编号
+```
+
+预测结果是一维数组：
+
+```text
+y_pred.shape = (30,)
+```
+
+数组中的每个数字代表一种鸢尾花：
+
+```text
+0 -> setosa
+1 -> versicolor
+2 -> virginica
+```
+
+可以查看类别编号和类别名称：
+
+```python
+print(y_pred)
+print(iris.target_names[y_pred])
+```
+
+预测时只传入 `x_test_scaled`，不能把 `y_test` 交给模型。`y_test` 是测试集的正确答案，下一步才用它与 `y_pred` 对比并评估模型。
+
+```mermaid
+flowchart LR
+    A["x_test_scaled<br/>(30, 4)"] --> B["knn.predict"]
+    C["已保存的训练数据"] --> B
+    B --> D["y_pred<br/>(30,)"]
+    D --> E["30 个预测类别"]
+```
+
+### 注释：什么是惰性学习
+
+惰性学习（Lazy Learning）是指模型在训练阶段不进行实际的泛化或模式提取，而是直接存储训练数据。只有在预测阶段，模型才会根据输入的新样本计算与训练数据的距离或相似度来做出预测。
+
+为什么要这样，惰性学习的特点：
+
+```text
+fit 阶段：
+保存 x_train 和 y_train
+
+predict 阶段：
+1. 计算新样本与训练样本的距离
+2. 找到最近的 K 个邻居
+3. 根据邻居投票
+4. 得到预测类别
+```
+
+惰性学习的有点：
+
+```text
+训练速度通常较快
+需要保存训练数据
+预测时计算量较大
+训练数据越多，预测可能越慢
