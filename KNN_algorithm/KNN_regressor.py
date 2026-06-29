@@ -27,4 +27,6 @@ estimator = KNeighborsRegressor(n_neighbors=3)
 estimator.fit(x_train, y_train)
 
 # 模型预测
+# KNN 回归在特征空间中找最近邻并对邻居标签取平均。
+# 它不同于线性回归：线性回归会求全局权重 w，并用 X @ w 预测。
 print(estimator.predict([[3, 11, 10]]))
