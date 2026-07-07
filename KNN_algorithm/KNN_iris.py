@@ -1,6 +1,12 @@
 """
 用KNN算法预测鸢尾花
 
+对应 Markdown：
+    - KNN_iris学习路径.md：鸢尾花案例学习顺序
+    - KNN算法.md：第一节 KNN算法简介
+    - 标准化学习笔记.md：第 7 节 训练集和测试集的正确标准化方式
+    - 线性回归与线性代数学习地图.md：第 9 节 Iris 二维可视化中的投影
+
 主要有一下几个步骤：
 
 1. 导包
@@ -44,7 +50,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 
-# 2. 加载数据集
+# 2. 加载数据集，对应 KNN_iris学习路径.md：先拿到 sklearn 内置的 Iris 数据。
 iris = load_iris()
 
 print(type(iris))
@@ -53,7 +59,7 @@ print(iris.keys())
 print(iris.data.shape)
 print(iris.target.shape)
 
-# 3. 提取特征和标签
+# 3. 提取特征和标签，对应 NumPy_机器学习基础笔记.md 第 4 节：X.shape = (样本数, 特征数)。
 # 线性代数视角：x 是 150 行 4 列的矩阵，每一行是 R^4 中的一个样本向量。
 x = iris.data
 y = iris.target
@@ -62,7 +68,7 @@ print(x[0])
 print(y[0])
 print(iris.target_names[y[0]])
 
-# 4. 分割训练集和测试集
+# 4. 分割训练集和测试集，对应机器学习基本流程：训练集学习，测试集最终评估。
 x_train, x_test, y_train, y_test = train_test_split(
     x,
     y,
@@ -78,7 +84,8 @@ print(x_test.shape)
 print(y_train.shape)
 print(y_test.shape)
 
-# 5. 对数据进行标准化
+# 5. 对数据进行标准化，对应标准化学习笔记.md 第 7 节。
+# 训练集用 fit_transform 学习并应用规则；测试集只能 transform，避免数据泄露。
 # 标准化保持矩阵形状不变，但会平移并缩放四个特征坐标轴。
 scaler = StandardScaler()
 x_train_scaled = scaler.fit_transform(x_train)
@@ -92,7 +99,7 @@ print(x_train_scaled.mean(axis=0))
 # 输出标准化之后每一列的标准差
 print(x_train_scaled.std(axis=0))
 
-# 6. 创建KNN估计器
+# 6. 创建KNN估计器，对应 KNN算法.md 第一节 2：n_neighbors 是需要提前指定的 K 值。
 # 注意鸢尾花数据集是一个多分类问题，所以我们使用KNeighborsClassifier这个分类器来进行预测
 knn = KNeighborsClassifier(n_neighbors=5)
 
@@ -100,10 +107,10 @@ print("-----------------------------------------------------")
 print(knn)
 print(knn.n_neighbors)
 
-# 7. 使用训练集训练模型
+# 7. 使用训练集训练模型，对应 KNN算法.md 第五节 1：KNN 的 fit 主要保存训练样本。
 knn.fit(x_train_scaled, y_train)
 
-# 8. 使用测试集预测并评估模型
+# 8. 使用测试集预测并评估模型，对应 KNN算法.md 第二节 3：分类问题输出类别预测。
 y_pred = knn.predict(x_test_scaled)
 accuracy = knn.score(x_test_scaled, y_test)
 
@@ -112,7 +119,7 @@ print("预测标签：", y_pred)
 print("真实标签：", y_test)
 print(f"测试集准确率：{accuracy:.2%}")
 
-# 9. 数据可视化
+# 9. 数据可视化，对应线性回归与线性代数学习地图.md 第 9 节。
 # 原始样本位于四维特征空间；这里只选择两个坐标映射到二维平面。
 # 这只是可视化视图，不等同于线性回归中把 y 正交投影到 Col(X)。
 colors = ("#0077B6", "#F4A261", "#2A9D8F")
