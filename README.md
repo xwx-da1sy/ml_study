@@ -8,16 +8,17 @@
 -> 特征缩放、Iris 训练 / 预测 / 评估 / 可视化
 -> 交叉验证与网格搜索
 -> 线性回归
--> 逻辑回归（当前）
+-> 逻辑回归
+-> 决策树
+-> 集成学习（当前）
 ```
 
-当前逻辑回归已经完成的内容：
+当前集成学习已经开始的内容：
 
-- 数学基础：概率、条件概率、伯努利分布、odds / log-odds、sigmoid、决策边界
-- 交叉熵与损失函数
-- 梯度与参数更新
-- NumPy 手写逻辑回归 notebook
-- `logistic_regression_numpy_manual.py` 手搓脚本正在继续完善
+- 已阅读机器学习概述、决策树与随机森林相关背景
+- 已新建 `ensemble_learning/` 章节目录
+- 已建立 Bagging、Boosting、Stacking 三条学习主线
+- 已完成集成学习第一课：基本概念
 
 ## 数学主线
 
@@ -50,6 +51,10 @@
   - 线性回归完整学习过程
 - `logistic_regressor/`
   - 逻辑回归学习笔记与手写实现
+- `decision_tree/`
+  - 决策树、ID3、C4.5、CART、随机森林与 Titanic 案例
+- `ensemble_learning/`
+  - 集成学习路线、Bagging、Boosting、Stacking 相关笔记
 
 ## 当前重点文件
 
@@ -70,8 +75,17 @@
 - [逻辑回归第三课_梯度与参数更新](logistic_regressor/逻辑回归第三课_梯度与参数更新.ipynb)
 - [逻辑回归第四课_手写逻辑回归](logistic_regressor/逻辑回归第四课_手写逻辑回归.ipynb)
 - [logistic_regression_numpy_manual.py](logistic_regressor/logistic_regression_numpy_manual.py)
+- [集成学习学习路线](ensemble_learning/集成学习学习路线.ipynb)
+- [集成学习第一课_基本概念](ensemble_learning/集成学习第一课_基本概念.ipynb)
 
 ## 最近进度
+
+### 2026/7/17
+
+- 已从决策树与随机森林过渡到集成学习章节
+- 已新建 `ensemble_learning/` 目录
+- 已建立集成学习路线：Bagging、Boosting、Stacking
+- 已完成第一课：集成学习基本概念
 
 ### 2026/7/10
 
@@ -92,13 +106,9 @@
 
 ## 下一步
 
-当前最直接的下一步是继续完善：
+当前最直接的下一步是继续学习：
 
-- `logistic_regression_numpy_manual.py`
-
-后续计划：
-
-- 训练完成后的预测与准确率评估
-- 决策边界可视化
-- `sklearn` 版逻辑回归实战
-- 分类评估指标：混淆矩阵、precision、recall、F1
+- Bagging 与随机森林复盘
+- AdaBoost：从错题加权理解 Boosting
+- GBDT：从残差理解梯度提升树
+- sklearn 集成学习实战
