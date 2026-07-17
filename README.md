@@ -19,6 +19,9 @@
 - 已新建 `ensemble_learning/` 章节目录
 - 已建立 Bagging、Boosting、Stacking 三条学习主线
 - 已完成集成学习第一课：基本概念
+- 已开始第二课：Bagging
+- 已开始第三课：随机森林复盘
+- 已开始第四课：AdaBoost
 
 ## 数学主线
 
@@ -77,6 +80,9 @@
 - [logistic_regression_numpy_manual.py](logistic_regressor/logistic_regression_numpy_manual.py)
 - [集成学习学习路线](ensemble_learning/集成学习学习路线.ipynb)
 - [集成学习第一课_基本概念](ensemble_learning/集成学习第一课_基本概念.ipynb)
+- [集成学习第二课_Bagging](ensemble_learning/集成学习第二课_Bagging.ipynb)
+- [集成学习第三课_随机森林复盘](ensemble_learning/集成学习第三课_随机森林复盘.ipynb)
+- [集成学习第四课_AdaBoost](ensemble_learning/集成学习第四课_AdaBoost.ipynb)
 
 ## 最近进度
 
@@ -86,11 +92,13 @@
 - 已新建 `ensemble_learning/` 目录
 - 已建立集成学习路线：Bagging、Boosting、Stacking
 - 已完成第一课：集成学习基本概念
+- 已开始第二课：Bagging，并加入 Bootstrap、投票、平均、OOB 与 sklearn 实战示例
+- 已开始第三课：随机森林复盘，并加入 Bagging / 随机森林对比、OOB 与特征重要性示例
+- 已开始第四课：AdaBoost，并加入样本权重、弱学习器权重、加权投票与 sklearn 实战示例
 
 ### 2026/7/10
 
 - 已将逻辑回归拆分为多份独立 notebook，避免内容混杂
-- 已修正逻辑回归公式渲染问题，统一为可正常显示的数学格式
 - 已完成逻辑回归前四课
 - 已开始用 `NumPy` 和 `sklearn` 结合手搓逻辑回归脚本
 - 当前脚本已完成：
@@ -108,7 +116,9 @@
 
 当前最直接的下一步是继续学习：
 
+- 运行并理解 `集成学习第二课_Bagging.ipynb`
 - Bagging 与随机森林复盘
-- AdaBoost：从错题加权理解 Boosting
+- 运行并理解 `集成学习第三课_随机森林复盘.ipynb`
+- 运行并理解 `集成学习第四课_AdaBoost.ipynb`
 - GBDT：从残差理解梯度提升树
 - sklearn 集成学习实战
