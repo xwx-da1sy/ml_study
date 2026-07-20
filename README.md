@@ -22,6 +22,7 @@
 - 已开始第二课：Bagging
 - 已开始第三课：随机森林复盘
 - 已开始第四课：AdaBoost
+- 已开始第五课：GBDT
 
 ## 数学主线
 
@@ -83,6 +84,7 @@
 - [集成学习第二课_Bagging](ensemble_learning/集成学习第二课_Bagging.ipynb)
 - [集成学习第三课_随机森林复盘](ensemble_learning/集成学习第三课_随机森林复盘.ipynb)
 - [集成学习第四课_AdaBoost](ensemble_learning/集成学习第四课_AdaBoost.ipynb)
+- [集成学习第五课_GBDT](ensemble_learning/集成学习第五课_GBDT.ipynb)
 
 ## 最近进度
 
@@ -95,6 +97,7 @@
 - 已开始第二课：Bagging，并加入 Bootstrap、投票、平均、OOB 与 sklearn 实战示例
 - 已开始第三课：随机森林复盘，并加入 Bagging / 随机森林对比、OOB 与特征重要性示例
 - 已开始第四课：AdaBoost，并加入样本权重、弱学习器权重、加权投票、数学推导、手算例子与 sklearn 实战示例
+- 已开始第五课：GBDT，并加入残差、负梯度、三轮手算推导与 sklearn 回归示例
 
 ### 2026/7/10
 
@@ -120,5 +123,5 @@
 - Bagging 与随机森林复盘
 - 运行并理解 `集成学习第三课_随机森林复盘.ipynb`
 - 运行并理解 `集成学习第四课_AdaBoost.ipynb`
-- GBDT：从残差理解梯度提升树
+- 运行并理解 `集成学习第五课_GBDT.ipynb`
 - sklearn 集成学习实战
