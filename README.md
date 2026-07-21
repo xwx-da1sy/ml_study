@@ -23,6 +23,7 @@
 - 已开始第三课：随机森林复盘
 - 已开始第四课：AdaBoost
 - 已开始第五课：GBDT
+- 已开始第六课：XGBoost
 
 ## 数学主线
 
@@ -85,6 +86,7 @@
 - [集成学习第三课_随机森林复盘](ensemble_learning/集成学习第三课_随机森林复盘.ipynb)
 - [集成学习第四课_AdaBoost](ensemble_learning/集成学习第四课_AdaBoost.ipynb)
 - [集成学习第五课_GBDT](ensemble_learning/集成学习第五课_GBDT.ipynb)
+- [集成学习第六课_XGBoost](ensemble_learning/集成学习第六课_XGBoost.ipynb)
 
 ## 最近进度
 
@@ -98,6 +100,7 @@
 - 已开始第三课：随机森林复盘，并加入 Bagging / 随机森林对比、OOB 与特征重要性示例
 - 已开始第四课：AdaBoost，并加入样本权重、弱学习器权重、加权投票、数学推导、手算例子与 sklearn 实战示例
 - 已开始第五课：GBDT，并加入残差、负梯度、三轮手算推导与 sklearn 回归示例
+- 已开始第六课：XGBoost，并加入目标函数、二阶梯度、正则化、叶子输出和切分增益推导
 
 ### 2026/7/10
 
@@ -124,4 +127,5 @@
 - 运行并理解 `集成学习第三课_随机森林复盘.ipynb`
 - 运行并理解 `集成学习第四课_AdaBoost.ipynb`
 - 运行并理解 `集成学习第五课_GBDT.ipynb`
+- 运行并理解 `集成学习第六课_XGBoost.ipynb`
 - sklearn 集成学习实战
